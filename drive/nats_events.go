@@ -60,6 +60,7 @@ func handleNewUserRegistration(ctx context.Context, nc *nats.Conn, svc *DriveSer
 			deadLetterQueue(nc, user.UserID, rootNodeId.String())
 			return
 		}
+		log.Printf("request to storage svc sent for user ID %v\n", user.UserID)
 
 		if !status.Authorized && status.AuthorizationTries < uint8(numRetries) {
 			if err = grantAuthorizationPrevileges(nc, user.UserID, rootNodeId.String(), "owner"); err != nil {
@@ -81,6 +82,7 @@ func handleNewUserRegistration(ctx context.Context, nc *nats.Conn, svc *DriveSer
 			deadLetterQueue(nc, user.UserID, rootNodeId.String())
 			return
 		}
+		log.Printf("request to authorization svc sent for user ID %v\n", user.UserID)
 	}
 }
 

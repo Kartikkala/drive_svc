@@ -7,6 +7,7 @@ import (
 )
 
 func NewDriveService(DB *gorm.DB) *DriveService {
+	DB.AutoMigrate(&Drive{})
 	return &DriveService{
 		db: DB,
 	}

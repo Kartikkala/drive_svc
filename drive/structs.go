@@ -26,9 +26,8 @@ type StorageProvisionStatus struct {
 }
 
 type AuthorizationStatus struct {
-	UserID     uint64 `json:"user_id"`
-	Success     bool   `json:"status"`
-	RootNodeID string `json:"root_node_id"`
+	UserID  uint64 `json:"user_id"`
+	Success bool   `json:"success"`
 }
 
 type DeadLetterQueueRequest struct {
