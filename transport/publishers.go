@@ -1,4 +1,4 @@
-package drive
+package transport
 
 import (
 	"encoding/json"
@@ -41,17 +41,4 @@ func grantAuthorizationPrevileges(nc *nats.Conn, UserID uint64, RootNodeID strin
 		return err
 	}
 	return nil
-}
-
-func deadLetterQueue(nc *nats.Conn, UserID uint64, RootNodeID string) {
-	var dlqReq *DeadLetterQueueRequest = &DeadLetterQueueRequest{
-		Status:     false,
-		UserID:     UserID,
-		RootNodeID: RootNodeID,
-	}
-	msg, err := json.Marshal(*dlqReq)
-	if err != nil {
-		log.Println("error marshaling registration status to json")
-	}
-	nc.Publish("dlq.user.status", msg)
 }

@@ -10,6 +10,7 @@ import (
 
 	"github.com/Kartikkala/drive_svc/config"
 	"github.com/Kartikkala/drive_svc/drive"
+	"github.com/Kartikkala/drive_svc/transport"
 	"github.com/nats-io/nats.go"
 )
 
@@ -25,10 +26,14 @@ func main() {
 		log.Println("Error in NATS server connection...", err)
 		return
 	}
-	driveSvc := drive.NewDriveService(app.DB)
+	driveRepository := drive.NewDriveRepository(app.DB)
+	driveSvc := drive.NewDriveService(driveRepository)
+	eventHandlers := transport.NewDriveEventHandler(driveSvc)
+	transport.AttachEvents(nc, eventHandlers)
+
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
-	drive.AttachEvents(ctx, nc, driveSvc)
+
 	log.Println("Drive service active and listening...")
 	<-ctx.Done()
 }
