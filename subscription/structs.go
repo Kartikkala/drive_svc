@@ -1,4 +1,4 @@
-package transport
+package subscription
 
 import (
 	"github.com/Kartikkala/drive_svc/shared"

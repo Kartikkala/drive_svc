@@ -1,4 +1,4 @@
-package transport
+package subscription
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package transport
+package subscription
 
 import (
 	"github.com/nats-io/nats.go"

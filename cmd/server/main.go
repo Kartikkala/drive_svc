@@ -10,7 +10,7 @@ import (
 
 	"github.com/Kartikkala/drive_svc/config"
 	"github.com/Kartikkala/drive_svc/drive"
-	"github.com/Kartikkala/drive_svc/transport"
+	"github.com/Kartikkala/drive_svc/subscription"
 	"github.com/nats-io/nats.go"
 )
 
@@ -28,8 +28,10 @@ func main() {
 	}
 	driveRepository := drive.NewDriveRepository(app.DB)
 	driveSvc := drive.NewDriveService(driveRepository)
-	eventHandlers := transport.NewDriveEventHandler(driveSvc)
-	transport.AttachEvents(nc, eventHandlers)
+	driveSvcWithHooks := drive.NewDriveServiceWithHooks(driveSvc)
+	drive.RegisterAllDriveHooks(nc, driveSvcWithHooks)
+	eventHandlers := subscription.NewDriveEventHandler(driveSvcWithHooks)
+	subscription.AttachEvents(nc, eventHandlers)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
